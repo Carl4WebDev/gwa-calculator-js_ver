@@ -1,0 +1,14 @@
+body{
+    width: 100%;
+    height: 100vh;
+}
+#container {
+    margin-top: 20px;
+}
+.box {
+    width: auto;
+    height: auto;
+    background-color: grey;
+    margin: 10px;
+    display: inline-block;
+}
