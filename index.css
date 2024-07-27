@@ -6,9 +6,17 @@ body{
     margin-top: 20px;
 }
 .box {
-    width: auto;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    border-radius: 15px;
+    border: 3px solid black;
+    justify-content: center;
+    align-items: center;
+    width: 300px;
     height: auto;
-    background-color: grey;
-    margin: 10px;
+    background-color: whitesmoke;
+    margin: 5px;
+    padding: 10px;
     display: inline-block;
 }
