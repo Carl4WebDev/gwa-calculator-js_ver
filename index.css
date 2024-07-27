@@ -19,3 +19,9 @@ body{
     margin: 5px;
     padding: 10px;
 }
+.bg-cyan{
+    background-color:#0B5793;
+}
+.text-skyblue{
+    color: skyblue;
+}
