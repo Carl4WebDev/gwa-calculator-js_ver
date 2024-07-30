@@ -5,7 +5,6 @@ let enterPrefinal = document.getElementById('enter-prefinal');
 let enterFinals = document.getElementById('enter-finals');
 let enterUnit = document.getElementById('enter-unit');
 let addButton = document.getElementById('add-button');
-let removeButton = document.getElementById('remove-button');
 
 let creditPointsPerCourse = [];
 let courseUnits = [];
@@ -27,10 +26,6 @@ addButton.addEventListener('click', () => {
     }
 });
 
-removeButton.addEventListener('click', () => {
-    removeLastGradeEntry();
-});
-
 function validateInputs() {
     return (
         enterSubject.value.trim() !== '' &&
@@ -46,7 +41,9 @@ function popUpWarning() {
     let popUpWarning = document.getElementById('popup-warning');
     const popUp = document.createElement('div');
     popUp.className = "d-flex bg-white justify-content-center align-content-center p-3 fw-bolder fs-2 text-danger";
-    popUp.innerHTML = `<span>All inputs are required!</span>`;
+    popUp.innerHTML = `
+        <span>All inputs are required!</span>
+    `;
     popUpWarning.appendChild(popUp);
 
     setTimeout(() => {
@@ -91,10 +88,21 @@ function resultBox(gradesInfo) {
     let currentCreditPoints = parseFloat((finalGradeConversion * gradesInfo.unit).toFixed(2));
     creditPointsPerCourse.push(currentCreditPoints);
 
-    updateGWA();
+    let totalCreditPointsPerCourse = creditPointsPerCourse.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+    let totalCourseUnits = courseUnits.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+
+    let gwa = parseFloat(totalCreditPointsPerCourse / totalCourseUnits).toFixed(2);
+
+    console.log(gwa);
+    console.log(totalCreditPointsPerCourse);
+    console.log(totalCourseUnits);
+    console.log(creditPointsPerCourse);
+    console.log(finalGradeConversion);
+    console.log(courseUnits);
 
     const resultBox = document.getElementById('result-box');
     const newBox = document.createElement('div');
+    const span = document.createElement('span');
     newBox.className = 'box row';
 
     const classDesignSubject = "fw-bold fs-6 d-flex text-break justify-content-evenly align-content-center";
@@ -102,62 +110,29 @@ function resultBox(gradesInfo) {
     const classP = "text-break text-primary";
     const classDesignFinalGrades = "fw-bolder fs-4 d-flex text-break justify-content-evenly align-content-center text-primary";
     newBox.innerHTML = `
-        <div class="col-2 fw-bold fs-6">
-            <span>Subject:</span>
-            <span class="${classDesignSubject}"><p class="${classP}">${gradesInfo.subject}</p></span>
+        <div class="col-2 fw-bold fs-6"> 
+            <span>Subject:</span> 
+            <span class="${classDesignSubject}"><p class="${classP}">${gradesInfo.subject}</p></span> 
         </div>
-        <div class="col-2">
-            <span class="${classDesignGrades}"><span>Prelim:</span><p class="${classP}">${gradesInfo.prelim}</p></span>
+        <div class="col-2"> 
+            <span class="${classDesignGrades}"><span>Prelim:</span><p class="${classP}">${gradesInfo.prelim}</p></span> 
         </div>
-        <div class="col-2">
-            <span class="${classDesignGrades}"><span>Midterm:</span><p class="${classP}">${gradesInfo.midterm}</p></span>
+        <div class="col-2"> 
+            <span class="${classDesignGrades}"><span>Midterm:</span><p class="${classP}">${gradesInfo.midterm}</p></span> 
         </div>
-        <div class="col-2">
-            <span class="${classDesignGrades}"><span>Prefinal:</span><p class="${classP}">${gradesInfo.prefinal}</p></span>
+        <div class="col-2"> 
+            <span class="${classDesignGrades}"><span>Prefinal:</span><p class="${classP}">${gradesInfo.prefinal}</p></span> 
         </div>
-        <div class="col-2">
-            <span class="${classDesignGrades}"><span>Finals:</span><p class="${classP}">${gradesInfo.finals}</p></span>
+        <div class="col-2"> 
+            <span class="${classDesignGrades}"><span>Finals:</span><p class="${classP}">${gradesInfo.finals}</p></span> 
         </div>
-        <div class="col-2">
-            <span class="${classDesignGrades}"><span>Course Unit:</span><p class="${classP}">${gradesInfo.unit}</p></span>
+        <div class="col-2"> 
+            <span class="${classDesignGrades}"><span>Course Unit:</span><p class="${classP}">${gradesInfo.unit}</p></span> 
         </div>
-        <div class="col-12 bg-warning justify-content-center align-content-center rounded">
-            <span class="${classDesignFinalGrades}"><span>Final Grade:</span><p class="text-primary">${finalGrade}(${finalGradeConversion})</p></span>
+        <div class="col-12 bg-warning justify-content-center align-content-center rounded"> 
+            <span class="${classDesignFinalGrades}"><span>Final Grade:</span><p class="text-primary">${finalGrade}(${finalGradeConversion})</p></span> 
         </div>
     `;
-    newBox.dataset.gradeIndex = creditPointsPerCourse.length - 1;  // Add index to dataset for tracking
+    newBox.appendChild(span);
     resultBox.appendChild(newBox);
-}
-
-function updateGWA() {
-    let totalCreditPointsPerCourse = creditPointsPerCourse.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-    let totalCourseUnits = courseUnits.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-
-    let gwa = parseFloat(totalCreditPointsPerCourse / totalCourseUnits).toFixed(2);
-
-    console.log('GWA:', gwa);
-    console.log('Total Credit Points:', totalCreditPointsPerCourse);
-    console.log('Total Course Units:', totalCourseUnits);
-    console.log('Credit Points Per Course:', creditPointsPerCourse);
-    console.log('Course Units:', courseUnits);
-}
-
-function removeLastGradeEntry() {
-    if (creditPointsPerCourse.length === 0) {
-        alert('No grades to remove.');
-        return;
-    }
-
-    // Remove the last grade entry from the arrays
-    creditPointsPerCourse.pop();
-    courseUnits.pop();
-
-    // Remove the last result box element
-    const resultBox = document.getElementById('result-box');
-    if (resultBox.lastChild) {
-        resultBox.removeChild(resultBox.lastChild);
-    }
-
-    // Update the GWA after removal
-    updateGWA();
 }
