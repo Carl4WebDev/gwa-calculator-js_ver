@@ -13,7 +13,7 @@ body{
     border: 3px solid black;
     justify-content: center;
     align-items: center;
-    width:100%;
+    width:95%;
     height: auto;
     background-color: whitesmoke;
     margin: 5px;
@@ -24,4 +24,29 @@ body{
 }
 .text-skyblue{
     color: skyblue;
+}
+
+.display-gwa {
+    border: 5px solid black;
+    border-radius:15px;
+    padding: 5px;
+    background-color: whitesmoke;
+}
+.remove-button{
+    width: 100px;
+}
+
+@media (max-width: 750px) {
+    .box {
+        flex-direction: column;
+    }
+    
+    .box > div {
+        margin-bottom: 10px;
+        width: 90%;
+    }
+    
+    .box .bg-warning {
+        margin-top: 10px;
+    }
 }

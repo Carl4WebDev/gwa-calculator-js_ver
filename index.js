@@ -9,10 +9,11 @@ let removeButton = document.getElementById('remove-button');
 
 let creditPointsPerCourse = [];
 let courseUnits = [];
-let finalGradeConversion;
+let finalGradeConversions = []; // Renamed to be clearer
 
 addButton.addEventListener('click', () => {
     if (validateInputs()) {
+        
         let gradesInfo = {
             subject: enterSubject.value,
             prelim: parseFloat(enterPrelim.value),
@@ -21,7 +22,14 @@ addButton.addEventListener('click', () => {
             finals: parseFloat(enterFinals.value),
             unit: parseFloat(enterUnit.value)
         };
+                
         resultBox(gradesInfo);
+        enterSubject.value = "";
+        enterPrelim.value = "";
+        enterMidterm.value = "";
+        enterPrefinal.value = "";
+        enterFinals.value = "";
+        enterUnit.value = "";
     } else {
         popUpWarning();
     }
@@ -29,6 +37,7 @@ addButton.addEventListener('click', () => {
 
 removeButton.addEventListener('click', () => {
     removeLastGradeEntry();
+    // Local storage functions are removed
 });
 
 function validateInputs() {
@@ -62,7 +71,7 @@ function resultBox(gradesInfo) {
         (gradesInfo.finals * 0.40)
     ).toFixed(2);
 
-    courseUnits.push(gradesInfo.unit);
+    let finalGradeConversion;
 
     if (finalGrade >= 97.50 && finalGrade <= 100) {
         finalGradeConversion = 1.00;
@@ -90,6 +99,8 @@ function resultBox(gradesInfo) {
 
     let currentCreditPoints = parseFloat((finalGradeConversion * gradesInfo.unit).toFixed(2));
     creditPointsPerCourse.push(currentCreditPoints);
+    courseUnits.push(gradesInfo.unit);
+    finalGradeConversions.push(finalGradeConversion); // Corrected
 
     updateGWA();
 
@@ -98,7 +109,7 @@ function resultBox(gradesInfo) {
     newBox.className = 'box row';
 
     const classDesignSubject = "fw-bold fs-6 d-flex text-break justify-content-evenly align-content-center";
-    const classDesignGrades = "fw-bold fs-6 d-flex text-break justify-content-evenly align-content-center";
+    const classDesignGrades = "fw-bold fs-6 d-flex text-break justify-content-evenly align-content-center ";
     const classP = "text-break text-primary";
     const classDesignFinalGrades = "fw-bolder fs-4 d-flex text-break justify-content-evenly align-content-center text-primary";
     newBox.innerHTML = `
@@ -125,21 +136,18 @@ function resultBox(gradesInfo) {
             <span class="${classDesignFinalGrades}"><span>Final Grade:</span><p class="text-primary">${finalGrade}(${finalGradeConversion})</p></span>
         </div>
     `;
-    newBox.dataset.gradeIndex = creditPointsPerCourse.length - 1;  // Add index to dataset for tracking
     resultBox.appendChild(newBox);
 }
 
 function updateGWA() {
+    let displayGWA = document.getElementById('display-gwa');
+
     let totalCreditPointsPerCourse = creditPointsPerCourse.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
     let totalCourseUnits = courseUnits.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 
     let gwa = parseFloat(totalCreditPointsPerCourse / totalCourseUnits).toFixed(2);
 
-    console.log('GWA:', gwa);
-    console.log('Total Credit Points:', totalCreditPointsPerCourse);
-    console.log('Total Course Units:', totalCourseUnits);
-    console.log('Credit Points Per Course:', creditPointsPerCourse);
-    console.log('Course Units:', courseUnits);
+    displayGWA.innerText = gwa;
 }
 
 function removeLastGradeEntry() {
@@ -151,6 +159,7 @@ function removeLastGradeEntry() {
     // Remove the last grade entry from the arrays
     creditPointsPerCourse.pop();
     courseUnits.pop();
+    finalGradeConversions.pop(); // Corrected
 
     // Remove the last result box element
     const resultBox = document.getElementById('result-box');
