@@ -27,13 +27,16 @@ body{
 }
 
 .display-gwa {
-    border: 5px solid black;
     border-radius:15px;
     padding: 5px;
     background-color: whitesmoke;
 }
 .remove-button{
     width: 100px;
+}
+.popup-main{
+    position: fixed;
+    top: 65px;
 }
 
 @media (max-width: 750px) {
@@ -48,5 +51,13 @@ body{
     
     .box .bg-warning {
         margin-top: 10px;
+    }
+    header{
+        position: fixed;
+        width: 100%;
+        height: auto;
+    }
+    .input-section{
+        margin-top: 95px;
     }
 }

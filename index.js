@@ -9,7 +9,7 @@ let removeButton = document.getElementById('remove-button');
 
 let creditPointsPerCourse = [];
 let courseUnits = [];
-let finalGradeConversions = []; // Renamed to be clearer
+let finalGradeConversions = []; 
 
 addButton.addEventListener('click', () => {
     if (validateInputs()) {
@@ -31,13 +31,13 @@ addButton.addEventListener('click', () => {
         enterFinals.value = "";
         enterUnit.value = "";
     } else {
-        popUpWarning();
+        let warning = "All inputs are required!"
+        popUpWarning(warning);
     }
 });
 
 removeButton.addEventListener('click', () => {
     removeLastGradeEntry();
-    // Local storage functions are removed
 });
 
 function validateInputs() {
@@ -51,11 +51,12 @@ function validateInputs() {
     );
 }
 
-function popUpWarning() {
+function popUpWarning(warning) {
     let popUpWarning = document.getElementById('popup-warning');
     const popUp = document.createElement('div');
-    popUp.className = "d-flex bg-white justify-content-center align-content-center p-3 fw-bolder fs-2 text-danger";
-    popUp.innerHTML = `<span>All inputs are required!</span>`;
+
+    popUp.className = "d-flex bg-white justify-content-center align-content-center p-3 fw-bolder fs-2 text-danger z-3 popup-main";
+    popUp.innerHTML = `<span>${warning}</span>`;
     popUpWarning.appendChild(popUp);
 
     setTimeout(() => {
@@ -100,7 +101,7 @@ function resultBox(gradesInfo) {
     let currentCreditPoints = parseFloat((finalGradeConversion * gradesInfo.unit).toFixed(2));
     creditPointsPerCourse.push(currentCreditPoints);
     courseUnits.push(gradesInfo.unit);
-    finalGradeConversions.push(finalGradeConversion); // Corrected
+    finalGradeConversions.push(finalGradeConversion); 
 
     updateGWA();
 
@@ -152,21 +153,19 @@ function updateGWA() {
 
 function removeLastGradeEntry() {
     if (creditPointsPerCourse.length === 0) {
-        alert('No grades to remove.');
+        let warnning = "No left to remove!"
+        popUpWarning(warnning)
         return;
     }
 
-    // Remove the last grade entry from the arrays
     creditPointsPerCourse.pop();
     courseUnits.pop();
-    finalGradeConversions.pop(); // Corrected
+    finalGradeConversions.pop(); 
 
-    // Remove the last result box element
     const resultBox = document.getElementById('result-box');
     if (resultBox.lastChild) {
         resultBox.removeChild(resultBox.lastChild);
     }
 
-    // Update the GWA after removal
     updateGWA();
 }
